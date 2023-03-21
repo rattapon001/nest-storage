@@ -6,9 +6,17 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     StorageModule.register({
+      global: false,
       disks: {
-        user: {
-          driver: 'local',
+        public: {
+          driver: 'minio',
+          bucket: 'public',
+          region: 'ap-southeast-2',
+          accessKey: 'minioadmin',
+          secretKey: 'minioadmin',
+          useSSL: false,
+          endPoint: 'http://192.168.2.133:9000',
+          port: 9000,
         },
       },
     }),

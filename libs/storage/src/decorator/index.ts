@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 
 const getDriverName = (name: string) => {
-  return `_STORAGE_${name}`;
+  return name;
 };
 
 export const InjectStorage = (name: string): ParameterDecorator =>

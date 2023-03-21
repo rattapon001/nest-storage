@@ -6,6 +6,7 @@ export interface DiskOptions {
   accessKey: string;
   secretKey: string;
   useSSL: boolean;
+  port: number;
 }
 
 export interface StorageOptions {
