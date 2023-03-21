@@ -1,4 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { StorageOptions } from '../interface/StorageOptions.interface';
 
 @Module({
   providers: [],
@@ -6,7 +7,7 @@ import { DynamicModule, Module, Provider } from '@nestjs/common';
 })
 export class StorageModule {
   constructor() {}
-  static register(options: any): DynamicModule {
+  static register(options: StorageOptions): DynamicModule {
     console.log(
       '🚀 ~ file: module.ts:10 ~ StorageModule ~ register ~ options:',
       options,
