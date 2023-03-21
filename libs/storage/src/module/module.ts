@@ -1,20 +1,25 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { StorageService } from './service';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 
 @Module({
-  imports: [],
-  controllers: [],
   providers: [],
   exports: [],
 })
 export class StorageModule {
   constructor() {}
   static register(options: any): DynamicModule {
+    console.log(
+      '🚀 ~ file: module.ts:10 ~ StorageModule ~ register ~ options:',
+      options,
+    );
+    const storageProvider: Provider = {
+      provide: '_STORAGE_TEST',
+      useClass: class Test {},
+    };
     return {
       global: true,
       module: StorageModule,
-      providers: [],
-      exports: [],
+      providers: [storageProvider],
+      exports: [storageProvider],
     };
   }
 }
