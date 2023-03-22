@@ -10,6 +10,6 @@ export interface DiskOptions {
 }
 
 export interface StorageOptions {
-  global?: boolean;
+  isGlobal?: boolean;
   disks: Record<string, DiskOptions>;
 }

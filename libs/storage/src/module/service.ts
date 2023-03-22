@@ -1,12 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { STORAGE_CONFIG } from '../utils/storage.config';
+import { StorageOptions } from '../interface/StorageOptions.interface';
+import { MODULE_OPTIONS_TOKEN } from '../utils/storage.module-definition';
 
 @Injectable()
 export class StorageService {
-  constructor(@Inject(STORAGE_CONFIG) private option: any) {
+  constructor(@Inject(MODULE_OPTIONS_TOKEN) private options: StorageOptions) {
     console.log(
       '🚀 ~ file: service.ts:7 ~ StorageService ~ constructor ~ option:',
-      option,
+      options,
     );
+  }
+
+  public put() {
+    console.log('this function put object');
   }
 }

@@ -1,34 +1,19 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { StorageOptions } from '../interface/StorageOptions.interface';
-import { STORAGE_CONFIG } from '../utils/storage.config';
+import {
+  ConfigurableModuleClass,
+  OPTIONS_TYPE,
+} from '../utils/storage.module-definition';
 import { StorageService } from './service';
 
 @Module({
-  providers: [],
-  exports: [],
+  providers: [StorageService],
+  exports: [StorageService],
 })
-export class StorageModule {
-  constructor() {}
-  public static register(options: StorageOptions): DynamicModule {
-    // console.log(
-    //   '🚀 ~ file: module.ts:10 ~ StorageModule ~ register ~ options:',
-    //   options,
-    // );
-    const storageProvider: Provider = {
-      provide: STORAGE_CONFIG,
-      useClass: class Test {},
-    };
+export class StorageModule extends ConfigurableModuleClass {
+  static register(options: typeof OPTIONS_TYPE): DynamicModule {
+    console.log(super.register(options));
     return {
-      global: true,
-      module: StorageModule,
-      providers: [
-        {
-          provide: STORAGE_CONFIG,
-          useValue: options,
-        },
-        StorageService,
-      ],
-      exports: [storageProvider],
+      ...super.register(options),
     };
   }
 }
