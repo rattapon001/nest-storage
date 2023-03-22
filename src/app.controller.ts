@@ -1,7 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { InjectStorage } from 'libs/storage/src/decorator';
-import { StorageDriver } from 'libs/storage/src/interface/storageDriver.interface';
-import { StorageService } from 'libs/storage/src/module/service';
+import { StorageService } from '../libs/storage/src/module/service';
 import { AppService } from './app.service';
 
 @Controller()

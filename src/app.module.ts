@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { StorageModule } from 'libs/storage/src/module/module';
+import { StorageModule } from '../libs/storage/src';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
