@@ -2,7 +2,7 @@ import * as Minio from 'minio';
 import { FileContent } from '../interface/fileContent.interface';
 import { StorageDriver } from '../interface/storageDriver.interface';
 import { DiskOptions } from '../interface/StorageOptions.interface';
-import { failedOrError } from '../utils/handle-error';
+import { failOrError } from '../utils/handle-error';
 
 export class MinioDriver implements StorageDriver {
   private minioClient: Minio.Client;
@@ -21,10 +21,14 @@ export class MinioDriver implements StorageDriver {
   }
 
   private async checkBuckets(bucket: string) {
-    const buckets: Minio.BucketItemFromList[] =
-      await this.minioClient.listBuckets();
-    if (!buckets.some((val) => val.name === bucket)) {
-      await this.minioClient.makeBucket(bucket);
+    try {
+      const buckets: Minio.BucketItemFromList[] =
+        await this.minioClient.listBuckets();
+      if (!buckets.some((val) => val.name === bucket)) {
+        await this.minioClient.makeBucket(bucket);
+      }
+    } catch (error) {
+      failOrError('on minio driver checkBuckets', error);
     }
   }
 
@@ -41,7 +45,7 @@ export class MinioDriver implements StorageDriver {
       );
       return objectName;
     } catch (error) {
-      failedOrError('on minio driver putObject', error);
+      failOrError('on minio driver putObject', error);
     }
   }
   public async fputObject(
@@ -52,7 +56,7 @@ export class MinioDriver implements StorageDriver {
       await this.minioClient.fPutObject(this.bucket, objectName, filePath);
       return objectName;
     } catch (error) {
-      failedOrError('on minio driver fputObject', error);
+      failOrError('on minio driver fputObject', error);
     }
   }
 
@@ -69,7 +73,7 @@ export class MinioDriver implements StorageDriver {
       );
       return url;
     } catch (error) {
-      failedOrError('on minio driver signedUrl', error);
+      failOrError('on minio driver signedUrl', error);
     }
   }
 }
