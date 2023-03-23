@@ -1,13 +1,13 @@
 import * as Minio from 'minio';
 import { FileContent } from '../interface/fileContent.interface';
 import { StorageDriver } from '../interface/storageDriver.interface';
-import { DiskOptions } from '../interface/StorageOptions.interface';
+import { MinioOptions } from '../interface/StorageOptions.interface';
 import { failOrError } from '../utils/handle-error';
 
 export class MinioDriver implements StorageDriver {
   private minioClient: Minio.Client;
   private bucket: string;
-  constructor(config: DiskOptions) {
+  constructor(config: MinioOptions) {
     this.minioClient = new Minio.Client({
       endPoint: config.endPoint,
       port: config.port,
@@ -32,7 +32,10 @@ export class MinioDriver implements StorageDriver {
     }
   }
 
-  async putObject(objectName: string, file: FileContent): Promise<string> {
+  public async putObject(
+    objectName: string,
+    file: FileContent,
+  ): Promise<string> {
     try {
       const metaData = {
         'Content-Type': file.mimetype,

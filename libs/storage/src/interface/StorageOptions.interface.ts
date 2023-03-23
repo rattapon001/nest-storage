@@ -1,5 +1,5 @@
-export interface DiskOptions {
-  driver: 's3' | 'minio';
+export interface MinioOptions {
+  driver: 'minio';
   endPoint: string;
   region?: string;
   bucket?: string;
@@ -9,7 +9,15 @@ export interface DiskOptions {
   port: number;
 }
 
+export interface S3Options {
+  driver: 's3';
+  region: string;
+  bucket: string;
+  accessKeyId?: string;
+  secretAccessKey?: string;
+}
+
 export interface StorageOptions {
   isGlobal?: boolean;
-  disks: Record<string, DiskOptions>;
+  disks: Record<string, MinioOptions | S3Options>;
 }

@@ -1,7 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { StorageDriver } from '../interface/storageDriver.interface';
 import {
-  DiskOptions,
+  MinioOptions,
+  S3Options,
   StorageOptions,
 } from '../interface/StorageOptions.interface';
 import { driverMap } from '../utils/driver.map';
@@ -32,7 +33,7 @@ export class StorageService {
     return this.drivers.get(dist);
   }
 
-  private newDriver(option: DiskOptions): StorageDriver {
+  private newDriver(option: MinioOptions | S3Options): StorageDriver {
     const driver = driverMap.get(option.driver);
     return new driver(option);
   }
