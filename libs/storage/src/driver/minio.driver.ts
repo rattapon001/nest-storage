@@ -22,6 +22,7 @@ export class MinioDriver implements StorageDriver {
     });
     this.bucket = config.bucket;
   }
+
   async putObject(objectName: string, file: FileContent): Promise<any> {
     try {
       const metaData = {
@@ -39,6 +40,20 @@ export class MinioDriver implements StorageDriver {
     }
   }
   fputObject(objectName: string, file: FileContent, filePath: string): any {}
+
   getObject(path: string): any {}
-  signedUrl(path: string, expireIn: number): any {}
+
+  public async signedUrl(
+    objectName: string,
+    expireIn: number,
+  ): Promise<string> {
+    const url = await this.minioClient.presignedUrl(
+      'GET',
+      this.bucket,
+      objectName,
+      expireIn,
+    );
+    console.log('🚀 ~ file: minio.driver.ts:53 ~ MinioDriver ~ url:', url);
+    return url;
+  }
 }
