@@ -11,14 +11,20 @@ import { MODULE_OPTIONS_TOKEN } from '../utils/storage.module-definition';
 export class StorageService {
   private drivers = new Map<string, StorageDriver>();
 
-  constructor(@Inject(MODULE_OPTIONS_TOKEN) private options: StorageOptions) {
-    const disks = Object.entries(options.disks);
+  constructor(
+    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: StorageOptions,
+  ) {
+    const disks = Object.entries(this.options.disks);
     disks.forEach((val) => {
       this.drivers.set(val[0], this.newDriver(val[1]));
     });
   }
 
-  private newDriver(option: DiskOptions) {
+  public getDriver(dist: string): StorageDriver {
+    return this.drivers.get(dist);
+  }
+
+  private newDriver(option: DiskOptions): StorageDriver {
     const driver = driverMap.get(option.driver);
     return new driver(option);
   }

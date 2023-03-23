@@ -1,9 +1,11 @@
 import * as Minio from 'minio';
+import { FileContent } from '../interface/fileContent.interface';
 import { StorageDriver } from '../interface/storageDriver.interface';
 import { DiskOptions } from '../interface/StorageOptions.interface';
 
 export class MinioDriver implements StorageDriver {
   private minioClient: Minio.Client;
+  private bucket: string;
   constructor(config: DiskOptions) {
     this.minioClient = new Minio.Client({
       endPoint: config.endPoint,
@@ -13,14 +15,21 @@ export class MinioDriver implements StorageDriver {
       secretKey: config.secretKey,
       region: config.region,
     });
+    this.bucket = config.bucket;
   }
-  putObject(objectName: string, file: any, bucket?: string): any {}
-  fputObject(
-    objectName: string,
-    file: any,
-    filePath: string,
-    bucket?: string,
-  ): any {}
-  getObject(path: string, bucket?: string): any {}
-  signedUrl(path: string, expireIn: number, bucket?: string): any {}
+  async putObject(objectName: string, file: FileContent): Promise<string> {
+    const metaData = {
+      'Content-Type': file.mimetype,
+    };
+    await this.minioClient.putObject(
+      this.bucket,
+      objectName,
+      file.buffer,
+      metaData,
+    );
+    return objectName;
+  }
+  fputObject(objectName: string, file: FileContent, filePath: string): any {}
+  getObject(path: string): any {}
+  signedUrl(path: string, expireIn: number): any {}
 }
