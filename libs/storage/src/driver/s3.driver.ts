@@ -6,6 +6,7 @@ import {
   ListBucketsCommand,
   CreateBucketCommand,
   Bucket,
+  PutObjectCommand,
 } from '@aws-sdk/client-s3';
 import { failOrError } from '../utils/handle-error';
 
@@ -71,7 +72,23 @@ export class S3Driver implements StorageDriver {
     objectName: string,
     file: FileContent,
   ): Promise<string> {
-    return '';
+    try {
+      const input = {
+        Body: file.buffer,
+        Bucket: this.bucket,
+        Key: objectName,
+        ContentType: file.mimetype,
+      };
+      const command = new PutObjectCommand(input);
+      const response = await this.s3Client.send(command);
+      console.log(
+        '🚀 ~ file: s3.driver.ts:84 ~ S3Driver ~ response:',
+        response,
+      );
+      return '';
+    } catch (error) {
+      failOrError('on s3 driver putObject', error);
+    }
   }
 
   public async fputObject(
