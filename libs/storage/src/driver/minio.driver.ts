@@ -17,6 +17,15 @@ export class MinioDriver implements StorageDriver {
       region: config.region,
     });
     this.bucket = config.bucket;
+    this.checkBuckets(config.bucket);
+  }
+
+  private async checkBuckets(bucket: string) {
+    const buckets: Minio.BucketItemFromList[] =
+      await this.minioClient.listBuckets();
+    if (!buckets.some((val) => val.name === bucket)) {
+      await this.minioClient.makeBucket(bucket);
+    }
   }
 
   async putObject(objectName: string, file: FileContent): Promise<string> {
