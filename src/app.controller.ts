@@ -11,7 +11,6 @@ export class AppController {
 
   async onModuleInit() {
     console.log('OnModuleInit');
-    this.s.put();
   }
 
   @Get()
