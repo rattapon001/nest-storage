@@ -47,13 +47,16 @@ export class MinioDriver implements StorageDriver {
     objectName: string,
     expireIn: number,
   ): Promise<string> {
-    const url = await this.minioClient.presignedUrl(
-      'GET',
-      this.bucket,
-      objectName,
-      expireIn,
-    );
-    console.log('🚀 ~ file: minio.driver.ts:53 ~ MinioDriver ~ url:', url);
-    return url;
+    try {
+      const url = await this.minioClient.presignedUrl(
+        'GET',
+        this.bucket,
+        objectName,
+        expireIn,
+      );
+      return url;
+    } catch (error) {
+      failedOrError('on minio driver signedUrl', error);
+    }
   }
 }
