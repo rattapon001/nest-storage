@@ -81,11 +81,8 @@ export class S3Driver implements StorageDriver {
       };
       const command = new PutObjectCommand(input);
       const response = await this.s3Client.send(command);
-      console.log(
-        '🚀 ~ file: s3.driver.ts:84 ~ S3Driver ~ response:',
-        response,
-      );
-      return '';
+
+      return objectName;
     } catch (error) {
       failOrError('on s3 driver putObject', error);
     }
