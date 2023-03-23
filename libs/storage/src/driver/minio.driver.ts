@@ -1,7 +1,3 @@
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
 import * as Minio from 'minio';
 import { FileContent } from '../interface/fileContent.interface';
 import { StorageDriver } from '../interface/storageDriver.interface';
@@ -23,7 +19,7 @@ export class MinioDriver implements StorageDriver {
     this.bucket = config.bucket;
   }
 
-  async putObject(objectName: string, file: FileContent): Promise<any> {
+  async putObject(objectName: string, file: FileContent): Promise<string> {
     try {
       const metaData = {
         'Content-Type': file.mimetype,
@@ -39,9 +35,17 @@ export class MinioDriver implements StorageDriver {
       failedOrError('on minio driver putObject', error);
     }
   }
-  fputObject(objectName: string, file: FileContent, filePath: string): any {}
-
-  getObject(path: string): any {}
+  public async fputObject(
+    objectName: string,
+    filePath: string,
+  ): Promise<string> {
+    try {
+      await this.minioClient.fPutObject(this.bucket, objectName, filePath);
+      return objectName;
+    } catch (error) {
+      failedOrError('on minio driver fputObject', error);
+    }
+  }
 
   public async signedUrl(
     objectName: string,

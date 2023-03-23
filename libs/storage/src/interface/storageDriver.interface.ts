@@ -1,8 +1,7 @@
 import { FileContent } from './fileContent.interface';
 
 export interface StorageDriver {
-  putObject(objectName: string, file: FileContent): any;
-  fputObject(objectName: string, file: FileContent, filePath: string): any;
-  getObject(path: string): any;
+  putObject(objectName: string, file: FileContent): Promise<string>;
+  fputObject(objectName: string, filePath: string): Promise<string>;
   signedUrl(objectName: string, expireIn: number): Promise<string>;
 }
