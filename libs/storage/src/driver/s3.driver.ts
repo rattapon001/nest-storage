@@ -11,6 +11,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { failOrError } from '../utils/handle-error';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { readFileSync } from 'fs';
+import * as mime from 'mime-types';
 
 export class S3Driver implements StorageDriver {
   private s3Client: S3Client;
@@ -93,7 +95,21 @@ export class S3Driver implements StorageDriver {
     objectName: string,
     filePath: string,
   ): Promise<string> {
-    return '';
+    try {
+      const file = readFileSync(filePath);
+      const type = mime.lookup(filePath);
+      const input = {
+        Body: file,
+        Bucket: this.bucket,
+        Key: objectName,
+        ContentType: type,
+      };
+      const command = new PutObjectCommand(input);
+      await this.s3Client.send(command);
+      return objectName;
+    } catch (error) {
+      failOrError('on s3 driver fputObject', error);
+    }
   }
 
   public async signedUrl(
