@@ -7,8 +7,10 @@ import {
   CreateBucketCommand,
   Bucket,
   PutObjectCommand,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { failOrError } from '../utils/handle-error';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 export class S3Driver implements StorageDriver {
   private s3Client: S3Client;
@@ -99,6 +101,17 @@ export class S3Driver implements StorageDriver {
     objectName: string,
     expireIn: number,
   ): Promise<string> {
-    return '';
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.bucket,
+        Key: objectName,
+      });
+      const url = await getSignedUrl(this.s3Client, command, {
+        expiresIn: expireIn,
+      });
+      return url;
+    } catch (error) {
+      failOrError('on s3 driver signedUrl', error);
+    }
   }
 }
