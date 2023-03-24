@@ -16,11 +16,11 @@ export class StorageService {
   constructor(
     @Inject(MODULE_OPTIONS_TOKEN) private readonly options: StorageOptions,
   ) {
-    this.inintDriver(options);
+    this.inintDriver(this.options);
   }
 
   private inintDriver(options: StorageOptions) {
-    const disks = Object.entries(this.options.disks);
+    const disks = Object.entries(options.disks);
     disks.forEach((val) => {
       this.drivers.set(val[0], this.newDriver(val[1]));
       this.logger.log(

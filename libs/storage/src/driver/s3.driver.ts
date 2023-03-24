@@ -19,7 +19,7 @@ export class S3Driver implements StorageDriver {
   constructor(config: S3Options) {
     this.bucket = config.bucket;
     this.region = config.region;
-    let s3AwsConfig: { [key: string]: any } = {};
+    const s3AwsConfig: { [key: string]: any } = {};
     s3AwsConfig['region'] = config.region;
     if (config.accessKeyId && config.secretAccessKey) {
       s3AwsConfig['credentials'] = {
@@ -82,8 +82,7 @@ export class S3Driver implements StorageDriver {
         ContentType: file.mimetype,
       };
       const command = new PutObjectCommand(input);
-      const response = await this.s3Client.send(command);
-
+      await this.s3Client.send(command);
       return objectName;
     } catch (error) {
       failOrError('on s3 driver putObject', error);

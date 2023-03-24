@@ -1,4 +1,4 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import {
   ASYNC_OPTIONS_TYPE,
   ConfigurableModuleClass,
