@@ -6,6 +6,7 @@ import {
   StorageOptions,
 } from '../interface/StorageOptions.interface';
 import { driverMap } from '../utils/driver.map';
+import { failOrError } from '../utils/handle-error';
 import { MODULE_OPTIONS_TOKEN } from '../utils/storage.module-definition';
 
 @Injectable()
@@ -34,7 +35,11 @@ export class StorageService {
   }
 
   private newDriver(option: MinioOptions | S3Options): StorageDriver {
-    const driver = driverMap.get(option.driver);
-    return new driver(option);
+    try {
+      const driver = driverMap.get(option.driver);
+      return new driver(option);
+    } catch (error) {
+      failOrError(error, 'On new driver');
+    }
   }
 }
